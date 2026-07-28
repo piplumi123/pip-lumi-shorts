@@ -50,8 +50,8 @@ from shorts_factory.models import (  # noqa: E402
 )
 
 
-SCRIPT_MODEL = os.getenv("OPENAI_SCRIPT_MODEL", "gpt-5.6")
-IMAGE_MODEL = os.getenv("OPENAI_IMAGE_MODEL", "gpt-image-2")
+SCRIPT_MODEL = os.getenv("OPENAI_SCRIPT_MODEL", "auto")
+IMAGE_MODEL = os.getenv("OPENAI_IMAGE_MODEL", "auto")
 ANIMATION_MODEL = os.getenv(
     "FAL_ANIMATION_MODEL", "fal-ai/kling-video/o1/reference-to-video"
 )
@@ -96,6 +96,17 @@ def openai_client():
     from openai import OpenAI
 
     return OpenAI(api_key=os.environ["OPENAI_API_KEY"], timeout=300.0)
+
+
+def choose_available_model(
+    requested: str,
+    preferred: list[str],
+    available: set[str],
+) -> str:
+    for candidate in [requested, *preferred]:
+        if candidate != "auto" and candidate in available:
+            return candidate
+    return ""
 
 
 def sample_plan(episode_number: int = 1) -> EpisodePlan:
@@ -585,8 +596,74 @@ def elevenlabs_post(
 
 
 def check_provider_access(references: dict[str, Path]) -> dict[str, str]:
+    global IMAGE_MODEL, SCRIPT_MODEL
+
     log("Validating provider access before paid generation.")
-    openai_client().models.retrieve(SCRIPT_MODEL)
+    available_models = {model.id for model in openai_client().models.list()}
+
+    requested_script = SCRIPT_MODEL
+    script_candidates = [
+        "gpt-5.4",
+        "gpt-5.2",
+        "gpt-5.1",
+        "gpt-5",
+        "gpt-4.1",
+        "gpt-4.1-mini",
+        "gpt-4o",
+    ]
+    SCRIPT_MODEL = choose_available_model(
+        requested_script, script_candidates, available_models
+    )
+    if not SCRIPT_MODEL:
+        compatible_text = sorted(
+            (
+                model
+                for model in available_models
+                if model.startswith(("gpt-5", "gpt-4.1", "gpt-4o"))
+                and not any(
+                    marker in model
+                    for marker in (
+                        "audio",
+                        "codex",
+                        "image",
+                        "realtime",
+                        "search",
+                        "transcribe",
+                        "tts",
+                    )
+                )
+            ),
+            reverse=True,
+        )
+        SCRIPT_MODEL = compatible_text[0] if compatible_text else ""
+    if not SCRIPT_MODEL:
+        raise RuntimeError(
+            "No compatible OpenAI text model is available. Checked: "
+            + ", ".join(script_candidates)
+        )
+
+    requested_image = IMAGE_MODEL
+    image_candidates = [
+        "gpt-image-2",
+        "gpt-image-1.5",
+        "gpt-image-1",
+    ]
+    IMAGE_MODEL = choose_available_model(
+        requested_image, image_candidates, available_models
+    )
+    if not IMAGE_MODEL:
+        compatible_images = sorted(
+            (model for model in available_models if model.startswith("gpt-image-")),
+            reverse=True,
+        )
+        IMAGE_MODEL = compatible_images[0] if compatible_images else ""
+    if not IMAGE_MODEL:
+        raise RuntimeError(
+            "No compatible OpenAI image model is available. Checked: "
+            + ", ".join(image_candidates)
+        )
+    log(f"Using OpenAI models: script={SCRIPT_MODEL}, image={IMAGE_MODEL}.")
+
     response = requests.get(
         "https://api.elevenlabs.io/v1/user",
         headers={"xi-api-key": os.environ["ELEVENLABS_API_KEY"]},
