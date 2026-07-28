@@ -64,6 +64,16 @@ def decode_references(repo_root: Path, target_dir: Path) -> dict[str, Path]:
         "lumi": decode_reference(
             source / "lumi-front.jpg.b64", target_dir / "lumi-front.jpg", (768, 1152)
         ),
+        "pip_angle": decode_reference(
+            source / "pip-angle.jpg.b64",
+            target_dir / "pip-angle.jpg",
+            (768, 1152),
+        ),
+        "lumi_angle": decode_reference(
+            source / "lumi-angle.jpg.b64",
+            target_dir / "lumi-angle.jpg",
+            (768, 1152),
+        ),
         "style": decode_reference(
             source / "style-reference.jpg.b64",
             target_dir / "style-reference.jpg",
