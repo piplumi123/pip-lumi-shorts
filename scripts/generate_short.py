@@ -527,11 +527,11 @@ pose that leads naturally into the next shot. Vertical 9:16 composition.
             "elements": [
                 {
                     "frontal_image_url": remote_references["pip"],
-                    "reference_image_urls": [],
+                    "reference_image_urls": [remote_references["pip_angle"]],
                 },
                 {
                     "frontal_image_url": remote_references["lumi"],
-                    "reference_image_urls": [],
+                    "reference_image_urls": [remote_references["lumi_angle"]],
                 },
             ],
             "duration": "5",
