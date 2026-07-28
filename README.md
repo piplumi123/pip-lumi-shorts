@@ -27,8 +27,8 @@ runs are manual so no API money is spent accidentally.
 
 Optional repository variables:
 
-- `OPENAI_SCRIPT_MODEL` (default `gpt-5.6`)
-- `OPENAI_IMAGE_MODEL` (default `gpt-image-2`)
+- `OPENAI_SCRIPT_MODEL` (default `auto`, chooses the best accessible model)
+- `OPENAI_IMAGE_MODEL` (default `auto`, chooses the best accessible image model)
 - `ELEVENLABS_VOICE_ID` (default `JBFqnCBsd6RMkjVDRZzb`)
 - `MAX_ESTIMATED_COST_USD` (default `7.00`)
 
