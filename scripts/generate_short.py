@@ -390,7 +390,6 @@ extra limb, costume change, or photoreal human.
             size="1024x1536",
             quality="medium",
             output_format="png",
-            input_fidelity="high",
         )
     item = result.data[0]
     raw_path = target.with_name(target.stem + "-raw.png")
@@ -913,9 +912,6 @@ def run_live(paths: RunPaths, episode_seed: str) -> Path:
     write_json(paths.run_root / "episode-plan.json", plan.model_dump())
     write_json(paths.run_root / "script-review.json", review.model_dump())
 
-    narration = generate_voice(plan, paths)
-    music = generate_music(plan, paths)
-
     frames = generate_frames(plan, references, paths)
     try:
         frame_review = review_frames(plan, frames)
@@ -936,6 +932,9 @@ def run_live(paths: RunPaths, episode_seed: str) -> Path:
                 )
     except Exception as exc:  # noqa: BLE001
         log(f"Visual review skipped after non-fatal {type(exc).__name__}.")
+
+    narration = generate_voice(plan, paths)
+    music = generate_music(plan, paths)
 
     raw_clips = animate_all(plan, frames, remote_references, paths)
     basename = f"episode-{episode_number:03d}"
