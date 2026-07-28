@@ -276,6 +276,7 @@ NON-NEGOTIABLE STORY DESIGN
 - Motion prompts must specify subject motion, camera motion, and a clean final pose.
 - Keep it delightful and safe, never babyish, generic, or copied from an existing franchise.
 - YouTube title must be truthful, curiosity-driven, under 70 characters, and include #Shorts.
+- YouTube description must not contain hashtags; hashtags are returned separately.
 {revision}
 """.strip()
     last_error: Exception | None = None
@@ -866,9 +867,14 @@ def write_publish_files(plan: EpisodePlan, paths: RunPaths, final_path: Path) ->
         "thumbnail": f"{stem}-thumbnail.jpg",
     }
     write_json(paths.output / f"{stem}-metadata.json", metadata)
+    missing_hashtags = [
+        tag
+        for tag in plan.hashtags
+        if tag.casefold() not in plan.youtube_description.casefold()
+    ]
     (paths.output / f"{stem}-upload-copy.txt").write_text(
         f"{plan.youtube_title}\n\n{plan.youtube_description}\n\n"
-        + " ".join(plan.hashtags)
+        + " ".join(missing_hashtags)
         + "\n",
         encoding="utf-8",
     )
