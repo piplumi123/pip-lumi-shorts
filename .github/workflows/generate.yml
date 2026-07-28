@@ -1,3 +1,4 @@
+# Revision 3: image-model-compatible generation
 name: Generate Pip & Lumi Short
 
 on:
