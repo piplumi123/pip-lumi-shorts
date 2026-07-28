@@ -10,7 +10,12 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
-from generate_short import choose_available_model, sample_plan  # noqa: E402
+from generate_short import (  # noqa: E402
+    RunPaths,
+    choose_available_model,
+    sample_plan,
+    write_publish_files,
+)
 from shorts_factory.core import (  # noqa: E402
     ass_time,
     atempo_chain,
@@ -53,6 +58,19 @@ def test_locked_multi_angle_references_decode(tmp_path: Path) -> None:
     references = decode_references(REPO_ROOT, tmp_path)
     assert set(references) == {"pip", "lumi", "pip_angle", "lumi_angle", "style"}
     assert all(path.stat().st_size > 10_000 for path in references.values())
+
+
+def test_upload_copy_does_not_duplicate_hashtags(tmp_path: Path) -> None:
+    plan = sample_plan()
+    plan.youtube_description += "\n\n#Shorts #Animation"
+    paths = RunPaths.create(tmp_path, "test")
+    fake_video = paths.output / "episode-001.mp4"
+    fake_video.touch()
+    write_publish_files(plan, paths, fake_video)
+    copy = (paths.output / "episode-001-upload-copy.txt").read_text()
+    assert copy.count("#Shorts") == 2  # once in the title, once in the description
+    assert copy.count("#Animation") == 1
+    assert "#PipAndLumi" in copy
 
 
 def test_caption_chunks_are_short_and_complete() -> None:
