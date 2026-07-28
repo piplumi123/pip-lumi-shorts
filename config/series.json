@@ -1,0 +1,23 @@
+{
+  "series_name": "Pip & Lumi: Startrail",
+  "language": "English",
+  "audience": "Family-friendly animation for children ages 6–9 and their parents",
+  "episode_seconds": 30,
+  "shot_count": 6,
+  "story_engine": "Every episode advances the mystery of a broken star map while still telling a complete miniature adventure.",
+  "world": "A luminous fantasy forest filled with forgotten machines, tiny celestial creatures, crystal rivers, and gentle mysteries.",
+  "characters": {
+    "Pip": "A tiny rounded teal-and-yellow robot with a glossy black face screen, bright cyan oval eyes, a glowing yellow star antenna, and a red scarf. Curious, brave, inventive, and sometimes too quick to press buttons.",
+    "Lumi": "An adorable white snow-leopard cub with dark navy rosettes, huge warm amber eyes, and a glowing turquoise tail tip. Observant, agile, kind, and able to sense hidden star magic."
+  },
+  "visual_style": "Premium cinematic 3D family animation, tactile materials, expressive faces, rich purple-blue night colors, warm golden star light, shallow depth of field, polished lighting, strong readable silhouettes.",
+  "hard_rules": [
+    "Pip and Lumi must keep exactly the same design, proportions, colors, and signature features in every shot.",
+    "Begin with an immediate visual mystery, danger, or surprising question in the first 0.8 seconds.",
+    "Use active motion and visible cause-and-effect; never make a slideshow.",
+    "Tell a complete problem-to-payoff story and end with a small twist that invites the next episode.",
+    "No copyrighted characters, brands, logos, text baked into imagery, cruelty, weapons, or frightening imagery.",
+    "Each episode must have a materially different central problem, setting action, and payoff."
+  ]
+}
+
