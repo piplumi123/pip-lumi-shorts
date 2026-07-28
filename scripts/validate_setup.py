@@ -13,6 +13,8 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 REQUIRED_ASSETS = [
     "pip-front.jpg.b64",
     "lumi-front.jpg.b64",
+    "pip-angle.jpg.b64",
+    "lumi-angle.jpg.b64",
     "style-reference.jpg.b64",
 ]
 
@@ -50,4 +52,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
