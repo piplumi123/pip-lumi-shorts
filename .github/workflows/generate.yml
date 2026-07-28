@@ -55,8 +55,8 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           FAL_KEY: ${{ secrets.FAL_KEY }}
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
-          OPENAI_SCRIPT_MODEL: ${{ vars.OPENAI_SCRIPT_MODEL || 'gpt-5.6' }}
-          OPENAI_IMAGE_MODEL: ${{ vars.OPENAI_IMAGE_MODEL || 'gpt-image-2' }}
+          OPENAI_SCRIPT_MODEL: ${{ vars.OPENAI_SCRIPT_MODEL || 'auto' }}
+          OPENAI_IMAGE_MODEL: ${{ vars.OPENAI_IMAGE_MODEL || 'auto' }}
           ELEVENLABS_VOICE_ID: ${{ vars.ELEVENLABS_VOICE_ID || 'JBFqnCBsd6RMkjVDRZzb' }}
           MAX_ESTIMATED_COST_USD: ${{ vars.MAX_ESTIMATED_COST_USD || '7.00' }}
           EPISODE_SEED: ${{ github.event.inputs.episode_seed || format('Fresh continuation episode {0}', github.run_number) }}
