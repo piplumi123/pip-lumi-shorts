@@ -10,7 +10,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
-from generate_short import sample_plan  # noqa: E402
+from generate_short import choose_available_model, sample_plan  # noqa: E402
 from shorts_factory.core import ass_time, atempo_chain, caption_chunks, write_ass  # noqa: E402
 from shorts_factory.models import EpisodePlan  # noqa: E402
 
@@ -34,6 +34,13 @@ def test_episode_plan_round_trip() -> None:
     restored = EpisodePlan.model_validate_json(plan.model_dump_json())
     assert restored.episode_number == 7
     assert restored.youtube_title.endswith("#Shorts")
+
+
+def test_model_resolution_prefers_requested_then_falls_back() -> None:
+    available = {"gpt-4.1", "gpt-image-1"}
+    assert choose_available_model("gpt-4.1", ["gpt-5", "gpt-4.1"], available) == "gpt-4.1"
+    assert choose_available_model("auto", ["gpt-5", "gpt-4.1"], available) == "gpt-4.1"
+    assert choose_available_model("auto", ["gpt-5"], available) == ""
 
 
 def test_caption_chunks_are_short_and_complete() -> None:
